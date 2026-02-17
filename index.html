@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Zelda Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="start-overlay">
+    <div class="start-card">
+      <p class="start-kicker">AUDIO DIGITAL</p>
+      <h1>The Legend of Link</h1>
+      <p class="start-text">Explora el mapa e interactua con las zonas.</p>
+      <button id="start-play" type="button">PLAY</button>
+    </div>
+  </div>
+
+  <div id="game" class="hidden-game">
+    <div id="link"></div>
+    <div id="prompt">E</div>
+
+    <div id="screen-overlay" class="hidden" aria-hidden="true">
+      <div id="screen-hint">ESC para volver</div>
+      <div id="screen-loading" class="screen-loading">Cargando...</div>
+      <iframe
+        id="screen-frame"
+        class="hidden"
+        title="Pantalla interactiva"
+        loading="lazy"
+        allowfullscreen="allowfullscreen"
+        allow="fullscreen"
+      ></iframe>
+    </div>
+  </div>
+
+  <a
+    id="canva-link"
+    href="https://www.canva.com/design/DAHAmIcQ5nw/cbu-LxzAKrfXzKLNDoOY5w/view?utm_content=DAHAmIcQ5nw&utm_campaign=designshare&utm_medium=embeds&utm_source=link"
+    hidden
+  >Canva</a>
+
+  <script src="js/collisions.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
