@@ -49,7 +49,7 @@ body {
   font-family: "Press Start 2P", system-ui;
   font-weight: 800;
   letter-spacing: 1px;
-  font-size: 34px;
+  font-size: 25px;
   line-height: 1;
   padding: 0;
   cursor: pointer;
@@ -65,8 +65,8 @@ body {
     2px 2px #000;
   animation: press-start-blink 1s steps(2, end) infinite;
    position: relative;
-  top: -84px;   /* baja solo PRESS STAR */
-  left: 0;
+  top: -147px;   /* baja solo PRESS STAR */
+  left: 55px;
 }
 
 #start-play:hover {
