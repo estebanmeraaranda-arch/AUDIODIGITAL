@@ -7,6 +7,8 @@ const screenOverlay = document.getElementById("screen-overlay");
 const screenFrame = document.getElementById("screen-frame");
 const screenLoading = document.getElementById("screen-loading");
 const canvaLinkEl = document.getElementById("canva-link");
+const ocarinaMarker = document.getElementById("ocarina-marker");
+const kojiMarker = document.getElementById("koji-marker");
 
 /* POSICION */
 let x = 280;
@@ -37,14 +39,16 @@ const screenLoadDelayMs = 2000;
 let waitingForTargetScreenLoad = false;
 let pendingScreenUrl = "";
 let frameLoadFallbackTimer = null;
+const idleAnimSpeed = 24;
+const showInteractionCollisions = false;
 
 /* SPRITES */
 const sprites = {
-  down: "source/abajo.png",
-  up: "source/arriba.png",
-  left: "source/Izquierda.png",
-  right: "source/derecha.png",
-  idle: "source/Estatico.png"
+  down: ["source/abajo1.png", "source/abajo2.png", "source/abajo3.png"],
+  up: ["source/arriba1.png", "source/arriba2.png", "source/arriba3.png"],
+  left: ["source/izquierda1.png", "source/izquierda2.png", "source/izquierda3.png"],
+  right: ["source/derecha1.png", "source/derecha2.png", "source/derecha3.png"],
+  idle: ["source/estatico1.png", "source/estatico2.png", "source/Estatico3.png"]
 };
 
 const keys = {};
@@ -84,6 +88,7 @@ function startGame() {
 }
 
 function renderInteractionDebug() {
+  if (!showInteractionCollisions) return;
   for (const area of interactions) {
     const box = document.createElement("div");
     box.className = "collision-box interaction";
@@ -92,6 +97,26 @@ function renderInteractionDebug() {
     box.style.width = area.width + "px";
     box.style.height = area.height + "px";
     game.appendChild(box);
+  }
+}
+
+function renderInteractionMarkers() {
+  const iconConfig = {
+    ocarina: ocarinaMarker,
+    canva: kojiMarker
+  };
+
+  for (const area of interactions) {
+    const icon = iconConfig[area.id];
+    if (!icon) continue;
+
+    const iconWidth = icon.offsetWidth || 36;
+    const iconHeight = icon.offsetHeight || 36;
+    const centerX = area.x + (area.width / 2);
+    const centerY = area.y + (area.height / 2);
+
+    icon.style.left = `${centerX - (iconWidth / 2)}px`;
+    icon.style.top = `${centerY - (iconHeight / 2)}px`;
   }
 }
 
@@ -244,27 +269,26 @@ function update() {
     keys["E"] = false;
   }
 
-  if (moving) {
-    link.style.backgroundImage = `url("${sprites[direction]}")`;
-    animTimer++;
-    if (animTimer >= animSpeed) {
-      frame = (frame + 1) % totalFrames;
-      animTimer = 0;
-    }
-  } else {
-    link.style.backgroundImage = `url("${sprites.idle}")`;
-    frame = 0;
+  const activeAnim = moving ? sprites[direction] : sprites.idle;
+  const frameSpeed = moving ? animSpeed : idleAnimSpeed;
+  animTimer++;
+  if (animTimer >= frameSpeed) {
+    frame = (frame + 1) % totalFrames;
+    animTimer = 0;
   }
+
+  link.style.backgroundImage = `url("${activeAnim[frame]}")`;
 
   link.style.left = x + "px";
   link.style.top = y + "px";
   link.style.width = frameWidth + "px";
   link.style.height = frameHeight + "px";
   link.style.transform = `scale(${linkScale})`;
-  link.style.backgroundPosition = `-${frame * frameWidth}px 0px`;
+  link.style.backgroundPosition = "0px 0px";
 
   requestAnimationFrame(update);
 }
 
 renderInteractionDebug();
+renderInteractionMarkers();
 closeScreen();

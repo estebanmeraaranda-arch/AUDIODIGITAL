@@ -10,18 +10,18 @@ const walls = [
 const interactions = [
   {
     id: "ocarina",
-    x: 200,
-    y: 150,
-    width: 40,
-    height: 40,
+    x: 160,
+    y: 120,
+    width: 110,
+    height: 90,
     prompt: "E: Abrir Ocarina"
   },
   {
     id: "canva",
-    x: 350,
-    y: 180,
-    width: 40,
-    height: 40,
+    x: 340,
+    y: 155,
+    width: 120,
+    height: 95,
     prompt: "E: Abrir Canva"
   }
 ];
