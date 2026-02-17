@@ -55,6 +55,12 @@ const keys = {};
 window.addEventListener("keydown", e => {
   keys[e.key] = true;
 
+  if (e.key === "Enter" && !gameStarted) {
+    startGame();
+    e.preventDefault();
+    return;
+  }
+
   if (e.key === "Escape" && screenOpen) {
     closeScreen();
     e.preventDefault();
