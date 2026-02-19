@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocarina of Time - Zelda</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Ocarina of Time</h1>
+        
+        <!-- Pentagrama con notas -->
+        <div class="staff-container">
+            <div class="treble-clef">
+                <img src="assets/penta/clef.svg" alt="Clave de Sol">
+            </div>
+            
+            <div class="staff-lines">
+                <div class="staff-line"></div>
+                <div class="staff-line"></div>
+                <div class="staff-line"></div>
+                <div class="staff-line"></div>
+            </div>
+            
+            <div class="notes-display" id="notesDisplay">
+                <!-- Las notas aparecerán aquí dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Controles de teclado visual -->
+        <div class="keyboard-controls">
+            <div class="key-hint">
+                <span class="key-label">Teclado:</span>
+            </div>
+            <div class="keyboard-layout">
+                <div class="key-group">
+                    <button class="keyboard-key arrow-key" data-note="C-up" data-key="ArrowUp">
+                        <img src="assets/penta/c-up.svg" alt="▲">
+                        <span class="key-binding">↑</span>
+                    </button>
+                </div>
+                <div class="key-group middle-row">
+                    <button class="keyboard-key arrow-key" data-note="C-left" data-key="ArrowLeft">
+                        <img src="assets/penta/c-left.svg" alt="◄">
+                        <span class="key-binding">←</span>
+                    </button>
+                    <button class="keyboard-key arrow-key" data-note="C-down" data-key="ArrowDown">
+                        <img src="assets/penta/c-down.svg" alt="▼">
+                        <span class="key-binding">↓</span>
+                    </button>
+                    <button class="keyboard-key arrow-key" data-note="C-right" data-key="ArrowRight">
+                        <img src="assets/penta/c-right.svg" alt="►">
+                        <span class="key-binding">→</span>
+                    </button>
+                </div>
+                <div class="key-group">
+                    <button class="keyboard-key a-key" data-note="A" data-key="a,z">
+                        <img src="assets/penta/a.svg" alt="A">
+                        <span class="key-binding">A / Z</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-buttons">
+            <button class="control-btn" id="clearBtn">
+                <span>🗑️</span> Limpiar
+            </button>
+            <button class="control-btn" id="replayBtn">
+                <span>🔄</span> Repetir
+            </button>
+        </div>
+
+        <div class="songs-list">
+            <h3>📜 Canciones Disponibles</h3>
+            <div class="songs-grid">
+                <div class="song-card">
+                    <span class="song-name">Zelda's Lullaby</span>
+                    <div class="song-sequence">
+                        <img src="assets/penta/c-left.svg" alt="◄" class="seq-C-left">
+                        <img src="assets/penta/c-up.svg" alt="▲" class="seq-C-up">
+                        <img src="assets/penta/c-right.svg" alt="►" class="seq-C-right">
+                        <img src="assets/penta/c-left.svg" alt="◄" class="seq-C-left">
+                        <img src="assets/penta/c-up.svg" alt="▲" class="seq-C-up">
+                        <img src="assets/penta/c-right.svg" alt="►" class="seq-C-right">
+                    </div>
+                </div>
+                <div class="song-card">
+                    <span class="song-name">Song of Time</span>
+                    <div class="song-sequence">
+                        <img src="assets/penta/c-right.svg" alt="►" class="seq-C-right">
+                        <img src="assets/penta/a.svg" alt="A" class="seq-A">
+                        <img src="assets/penta/c-down.svg" alt="▼" class="seq-C-down">
+                        <img src="assets/penta/c-right.svg" alt="►" class="seq-C-right">
+                        <img src="assets/penta/a.svg" alt="A" class="seq-A">
+                        <img src="assets/penta/c-down.svg" alt="▼" class="seq-C-down">
+                    </div>
+                </div>
+                <div class="song-card">
+                    <span class="song-name">Song of Healing</span>
+                    <div class="song-sequence">
+                        <img src="assets/penta/c-left.svg" alt="◄" class="seq-C-left">
+                        <img src="assets/penta/c-right.svg" alt="►" class="seq-C-right">
+                        <img src="assets/penta/c-down.svg" alt="▼" class="seq-C-down">
+                        <img src="assets/penta/c-left.svg" alt="◄" class="seq-C-left">
+                        <img src="assets/penta/c-right.svg" alt="►" class="seq-C-right">
+                        <img src="assets/penta/c-down.svg" alt="▼" class="seq-C-down">
+                    </div>
+                </div>
+                <div class="song-card">
+                    <span class="song-name">Saria's Song</span>
+                    <div class="song-sequence">
+                        <img src="assets/penta/c-down.svg" alt="▼" class="seq-C-down">
+                        <img src="assets/penta/c-right.svg" alt="►" class="seq-C-right">
+                        <img src="assets/penta/c-left.svg" alt="◄" class="seq-C-left">
+                        <img src="assets/penta/c-down.svg" alt="▼" class="seq-C-down">
+                        <img src="assets/penta/c-right.svg" alt="►" class="seq-C-right">
+                        <img src="assets/penta/c-left.svg" alt="◄" class="seq-C-left">
+                    </div>
+                </div>
+                <div class="song-card">
+                    <span class="song-name">Sun's Song</span>
+                    <div class="song-sequence">
+                        <img src="assets/penta/c-right.svg" alt="►" class="seq-C-right">
+                        <img src="assets/penta/c-down.svg" alt="▼" class="seq-C-down">
+                        <img src="assets/penta/c-up.svg" alt="▲" class="seq-C-up">
+                        <img src="assets/penta/c-right.svg" alt="►" class="seq-C-right">
+                        <img src="assets/penta/c-down.svg" alt="▼" class="seq-C-down">
+                        <img src="assets/penta/c-up.svg" alt="▲" class="seq-C-up">
+                    </div>
+                </div>
+                <div class="song-card">
+                    <span class="song-name">Song of Storms</span>
+                    <div class="song-sequence">
+                        <img src="assets/penta/a.svg" alt="A" class="seq-A">
+                        <img src="assets/penta/c-down.svg" alt="▼" class="seq-C-down">
+                        <img src="assets/penta/c-up.svg" alt="▲" class="seq-C-up">
+                        <img src="assets/penta/a.svg" alt="A" class="seq-A">
+                        <img src="assets/penta/c-down.svg" alt="▼" class="seq-C-down">
+                        <img src="assets/penta/c-up.svg" alt="▲" class="seq-C-up">
+                    </div>
+                </div>
+                <div class="song-card">
+                    <span class="song-name">Epona's Song</span>
+                    <div class="song-sequence">
+                        <img src="assets/penta/c-up.svg" alt="▲" class="seq-C-up">
+                        <img src="assets/penta/c-left.svg" alt="◄" class="seq-C-left">
+                        <img src="assets/penta/c-right.svg" alt="►" class="seq-C-right">
+                        <img src="assets/penta/c-up.svg" alt="▲" class="seq-C-up">
+                        <img src="assets/penta/c-left.svg" alt="◄" class="seq-C-left">
+                        <img src="assets/penta/c-right.svg" alt="►" class="seq-C-right">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla completa de reproducción -->
+    <div class="song-player" id="songPlayer">
+        <div class="background-overlay" id="backgroundOverlay"></div>
+        
+        <button class="close-button" id="closeButton">✕</button>
+        
+        <div class="player-content">
+            <div class="song-icon-large" id="songIconLarge">✨</div>
+            <h2 class="song-title-large" id="songTitleLarge">Canción Reconocida</h2>
+            
+            <div class="player-controls">
+                <div class="time-display">
+                    <span id="currentTime">0:00</span>
+                    <span id="totalTime">0:00</span>
+                </div>
+                
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progressBarFill"></div>
+                    </div>
+                    <input type="range" class="progress-slider" id="progressSlider" min="0" max="100" value="0">
+                </div>
+                
+                <div class="playback-controls">
+                    <button class="playback-btn" id="playPauseBtn">⏸️</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

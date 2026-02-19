@@ -9,6 +9,10 @@ const screenLoading = document.getElementById("screen-loading");
 const canvaLinkEl = document.getElementById("canva-link");
 const ocarinaMarker = document.getElementById("ocarina-marker");
 const kojiMarker = document.getElementById("koji-marker");
+const backgroundMusic = new Audio("source/Sonido.mp3");
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.45;
+backgroundMusic.preload = "auto";
 
 /* POSICION */
 let x = 280;
@@ -42,6 +46,15 @@ let frameLoadFallbackTimer = null;
 const idleAnimSpeed = 24;
 const showInteractionCollisions = false;
 
+function playBackgroundMusic() {
+  if (!gameStarted || screenOpen) return;
+  backgroundMusic.play().catch(() => {});
+}
+
+function stopBackgroundMusic() {
+  backgroundMusic.pause();
+}
+
 /* SPRITES */
 const sprites = {
   down: ["source/abajo1.png", "source/abajo2.png", "source/abajo3.png"],
@@ -52,7 +65,7 @@ const sprites = {
 };
 
 const keys = {};
-window.addEventListener("keydown", e => {
+function handleGlobalKeydown(e) {
   keys[e.key] = true;
 
   if (e.key === "Enter" && !gameStarted) {
@@ -64,6 +77,16 @@ window.addEventListener("keydown", e => {
   if (e.key === "Escape" && screenOpen) {
     closeScreen();
     e.preventDefault();
+  }
+}
+
+window.addEventListener("keydown", handleGlobalKeydown, true);
+document.addEventListener("keydown", handleGlobalKeydown, true);
+window.addEventListener("message", e => {
+  if (!screenOpen || !screenFrame) return;
+  if (e.source !== screenFrame.contentWindow) return;
+  if (e.data?.type === "close-screen") {
+    closeScreen();
   }
 });
 
@@ -82,6 +105,20 @@ if (screenFrame) {
     if (frameLoadFallbackTimer) clearTimeout(frameLoadFallbackTimer);
     if (screenLoading) screenLoading.classList.add("hidden");
     screenFrame.classList.remove("hidden");
+
+    // If iframe is same-origin, capture Escape inside it and close from parent.
+    try {
+      const frameWindow = screenFrame.contentWindow;
+      if (frameWindow && !frameWindow.__parentEscBound) {
+        frameWindow.addEventListener("keydown", evt => {
+          if (evt.key === "Escape" && screenOpen) {
+            closeScreen();
+            evt.preventDefault();
+          }
+        }, true);
+        frameWindow.__parentEscBound = true;
+      }
+    } catch {}
   });
 }
 
@@ -90,6 +127,8 @@ function startGame() {
   gameStarted = true;
   if (startOverlay) startOverlay.classList.add("hidden");
   if (game) game.classList.remove("hidden-game");
+  backgroundMusic.currentTime = 0;
+  playBackgroundMusic();
   update();
 }
 
@@ -130,9 +169,12 @@ function openScreen(url) {
   if (!screenFrame || !screenOverlay) return;
 
   screenOpen = true;
+  stopBackgroundMusic();
   prompt.style.display = "none";
   screenOverlay.classList.remove("hidden");
   screenOverlay.setAttribute("aria-hidden", "false");
+  screenOverlay.setAttribute("tabindex", "-1");
+  screenOverlay.focus();
 
   screenFrame.classList.add("hidden");
   if (screenLoading) screenLoading.classList.remove("hidden");
@@ -171,6 +213,7 @@ function closeScreen() {
   screenOverlay.classList.add("hidden");
   screenOverlay.setAttribute("aria-hidden", "true");
   screenOpen = false;
+  playBackgroundMusic();
 }
 
 function toCanvaEmbedUrl(rawUrl) {
@@ -193,7 +236,7 @@ function toCanvaEmbedUrl(rawUrl) {
 
 function triggerInteraction(area) {
   if (area.id === "ocarina") {
-    openScreen("Ocarina/ZELDA/index.html");
+    openScreen("Ocarina/ocarina/index.html");
     return;
   }
 
@@ -298,3 +341,4 @@ function update() {
 renderInteractionDebug();
 renderInteractionMarkers();
 closeScreen();
+
